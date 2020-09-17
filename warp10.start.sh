@@ -16,12 +16,12 @@
 #
 set -euo pipefail
 
-WARPSTUDIO_CONFIG=${WARP10_CONFIG_DIR}/80-warpstudio-plugin.conf
-
 warp10_pid=
 sensision_pid=
 
 source ${WARP10_HOME}/bin/setup.sh
+
+WARPSTUDIO_CONFIG=${WARP10_CONFIG_DIR}/80-warpstudio-plugin.conf
 
 #
 # SIGTERM-handler

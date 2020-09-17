@@ -17,21 +17,28 @@
 
 set -euo pipefail
 
+export WARP10_CONFIG_DIR=${WARP10_HOME}/etc/conf.d
+WARP10_MACROS=${WARP10_DATA_DIR}/macros
+WARP10_LIB_DIR=${WARP10_DATA_DIR}/lib
+LEVELDB_HOME=${WARP10_DATA_DIR}/leveldb
+WARP10_EXT_CONFIG_DIR=
+
 # WARP10 - install and manage upgrade
-if [ ! -d ${WARP10_DATA_DIR} ]; then
+if [ ! "$(ls -A $WARP10_DATA_DIR)" ]; then
   echo "Install Warp 10™"
   ${WARP10_HOME}/bin/warp10-standalone.init bootstrap
 else
   echo "Warp 10™ already installed"
 
+  # for Sensision
   rm -rf ${WARP10_HOME}/etc
   ln -s ${WARP10_DATA_DIR}/etc ${WARP10_HOME}/etc
 
   rm -rf ${WARP10_HOME}/leveldb
-  ln -s ${WARP10_DATA_DIR}/leveldb ${WARP10_HOME}/leveldb
+  ln -s ${LEVELDB_HOME} ${WARP10_HOME}/leveldb
 
   rm -rf ${WARP10_HOME}/macros
-  ln -s ${WARP10_DATA_DIR}/macros ${WARP10_HOME}/macros
+  ln -s ${WARP10_MACROS} ${WARP10_HOME}/macros
 
   rm -rf ${WARP10_HOME}/warpscripts
   ln -s ${WARP10_DATA_DIR}/warpscripts ${WARP10_HOME}/warpscripts
@@ -43,7 +50,7 @@ else
   ln -s ${WARP10_DATA_DIR}/jars ${WARP10_HOME}/jars
 
   rm -rf ${WARP10_HOME}/lib
-  ln -s ${WARP10_DATA_DIR}/lib ${WARP10_HOME}/lib
+  ln -s ${WARP10_LIB_DIR} ${WARP10_HOME}/lib
 
   rm -rf ${WARP10_HOME}/datalog
   ln -s ${WARP10_DATA_DIR}/datalog ${WARP10_HOME}/datalog
@@ -53,7 +60,7 @@ else
 fi
 
 # Sensision install
-if [ ! -d ${SENSISION_DATA_DIR} ]; then
+if [ ! "$(ls -A $SENSISION_DATA_DIR)" ]; then
   echo "Install Sensision"
   # Stop/start to init config
   ${SENSISION_HOME}/bin/sensision.init bootstrap
