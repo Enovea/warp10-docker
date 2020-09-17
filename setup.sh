@@ -60,21 +60,23 @@ else
 fi
 
 # Sensision install
-if [ ! "$(ls -A $SENSISION_DATA_DIR)" ]; then
-  echo "Install Sensision"
-  # Stop/start to init config
-  ${SENSISION_HOME}/bin/sensision.init bootstrap
-else
-  echo "Sensision already installed"
-  #clean
-  rm -rf ${SENSISION_HOME}/etc ${SENSISION_HOME}/scripts ${SENSISION_HOME}/logs ${SENSISION_HOME}/metrics ${SENSISION_HOME}/targets ${SENSISION_HOME}/queued
-  # link sensision
-  ln -s ${SENSISION_DATA_DIR}/etc ${SENSISION_HOME}/etc
-  ln -s ${SENSISION_DATA_DIR}/scripts ${SENSISION_HOME}/scripts
-  ln -s ${SENSISION_DATA_DIR}/logs ${SENSISION_HOME}/logs
-  ln -s ${SENSISION_DATA_DIR}/metrics ${SENSISION_HOME}/metrics
-  ln -s ${SENSISION_DATA_DIR}/targets ${SENSISION_HOME}/targets
-  ln -s ${SENSISION_DATA_DIR}/queued ${SENSISION_HOME}/queued
+if [ "$SENSISION_RUNNING" = true ]; then
+  if [ ! "$(ls -A $SENSISION_DATA_DIR)" ]; then
+    echo "Install Sensision"
+    # Stop/start to init config
+    ${SENSISION_HOME}/bin/sensision.init bootstrap
+  else
+    echo "Sensision already installed"
+    #clean
+    rm -rf ${SENSISION_HOME}/etc ${SENSISION_HOME}/scripts ${SENSISION_HOME}/logs ${SENSISION_HOME}/metrics ${SENSISION_HOME}/targets ${SENSISION_HOME}/queued
+    # link sensision
+    ln -s ${SENSISION_DATA_DIR}/etc ${SENSISION_HOME}/etc
+    ln -s ${SENSISION_DATA_DIR}/scripts ${SENSISION_HOME}/scripts
+    ln -s ${SENSISION_DATA_DIR}/logs ${SENSISION_HOME}/logs
+    ln -s ${SENSISION_DATA_DIR}/metrics ${SENSISION_HOME}/metrics
+    ln -s ${SENSISION_DATA_DIR}/targets ${SENSISION_HOME}/targets
+    ln -s ${SENSISION_DATA_DIR}/queued ${SENSISION_HOME}/queued
+  fi
 fi
 
 chown -Rf warp10:warp10 ${WARP10_DATA_DIR}

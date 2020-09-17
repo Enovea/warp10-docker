@@ -51,7 +51,8 @@ ARG SENSISION_URL=https://dl.bintray.com/senx/generic/io/warp10/sensision-servic
 ENV SENSISION_VERSION=${SENSISION_VERSION} \
     SENSISION_HOME=/opt/sensision \
     SENSISION_DATA_DIR=/data/sensision \
-    WARP10_JAR=${WARP10_HOME}/bin/warp10-${WARP10_VERSION}.jar
+    WARP10_JAR=${WARP10_HOME}/bin/warp10-${WARP10_VERSION}.jar \
+    SENSISION_RUNNING=true
 
 # Getting Sensision
 RUN cd /opt \

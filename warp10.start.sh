@@ -32,18 +32,26 @@ term_handler() {
     kill -SIGTERM "$warp10_pid"
   fi
 
-  echo "Stopping Sensision"
-  if [ $sensision_pid -ne 0 ]; then
-    kill -SIGTERM "$sensision_pid"
+  if [ "$SENSISION_RUNNING" = true ]; then
+    echo "Stopping Sensision"
+    if [ $sensision_pid -ne 0 ]; then
+      kill -SIGTERM "$sensision_pid"
+    fi
   fi
 
   #
   # Wait for non child process to finish
   #
-  while [ -e /proc/${warp10_pid} ] || [ -e /proc/${sensision_pid} ]
+  while [ -e /proc/${warp10_pid} ]
   do
     sleep 0.1
   done
+  if [ "$SENSISION_RUNNING" = true ]; then
+    while [ -e /proc/${sensision_pid} ]
+    do
+      sleep 0.1
+    done
+  fi
 
   echo "All process are stopped"
   exit 143; # 128 + 15 -- SIGTERM
@@ -100,9 +108,11 @@ if [ ${#files[@]} -gt 0 ]; then
   echo "Warp10 running, pid=${warp10_pid}"
 
   # Launching sensision
-  ${SENSISION_HOME}/bin/sensision.init start
-  sensision_pid=`cat ${SENSISION_HOME}/logs/sensision.pid`
-  echo "Sensision running, pid=${sensision_pid}"
+  if [ "$SENSISION_RUNNING" = true ]; then
+    ${SENSISION_HOME}/bin/sensision.init start
+    sensision_pid=`cat ${SENSISION_HOME}/logs/sensision.pid`
+    echo "Sensision running, pid=${sensision_pid}"
+  fi
 
   # TODO ends this script if warp10 is not running properly
   echo "All process are running"
